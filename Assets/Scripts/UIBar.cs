@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StmBar : MonoBehaviour
+public class UIBar : MonoBehaviour
 {
     private float defaultXScale;
 

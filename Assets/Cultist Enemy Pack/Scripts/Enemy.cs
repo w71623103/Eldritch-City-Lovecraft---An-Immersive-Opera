@@ -160,7 +160,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void OnHurt(float damage, float plX, float knockStr)
+    public void OnHurt(int damage, float plX, float knockStr)
     {
         knockBack(knockStr);
         ChangeGeneralState(hurtState);
@@ -170,8 +170,6 @@ public class Enemy : MonoBehaviour
         bloodEffect.OnPlayRandom();
         //hitEffect.OnPlayRandom();
         StartCoroutine(hitPause(5));
-
-        
     }
 
     //Attack Support Methods

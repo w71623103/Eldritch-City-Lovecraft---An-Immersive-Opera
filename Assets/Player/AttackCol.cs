@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackCol : MonoBehaviour
 {
-    public float AttackDmg;
+    public int AttackDmg;
     public float knock;
     private void Update()
     {

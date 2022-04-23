@@ -83,17 +83,25 @@ public class Player : MonoBehaviour
     public GeneralStateAttackHeavy attackStateHeavy = new GeneralStateAttackHeavy();
     public GeneralStateDash dashState = new GeneralStateDash();
     public GeneralStateMovementExplore exploreMoveState = new GeneralStateMovementExplore();
+    public GeneralStateHurt hurtState = new GeneralStateHurt();
 
     [Header("Stemima")]
     private float timer = 0f;
     [SerializeField] private float maxTimer = 2f;
-
     public int stemina;
     public int maxStemina = 100;
     public GameObject stmBar;
-
     private bool reSTMStarted = false;
     [SerializeField] private float reStmTimeWindow = 0.05f;
+
+    [Header("Hp")]
+    public int Hp;
+    public int maxHp = 100;
+    public GameObject hpBar;
+    private bool allowDamage = true;
+
+    [Header("Hit Effects")]
+    public PlayRandomEffects bloodEffect;
 
     public void ChangeGeneralState(GeneralStateBase newState)
     {
@@ -132,7 +140,7 @@ public class Player : MonoBehaviour
         StreetLayerHash = Animator.StringToHash("Street Layer");
         ExploreLayerHash = Animator.StringToHash("Expolre Layer");
         stemina = maxStemina;
-
+        Hp = maxHp;
 
     }
 
@@ -181,8 +189,10 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (currentSceneType == SceneTypeSetter.SceneType.Action) stmBar.GetComponent<StmBar>().percent = ((float)stemina / (float)maxStemina);
-
+        //Stm Bar
+        if (currentSceneType == SceneTypeSetter.SceneType.Action) stmBar.GetComponent<UIBar>().percent = ((float)stemina / (float)maxStemina);
+        //HP Bar
+        if (currentSceneType == SceneTypeSetter.SceneType.Action) hpBar.GetComponent<UIBar>().percent = ((float)Hp / (float)maxHp);
     }
 
     private void FixedUpdate()
@@ -190,34 +200,44 @@ public class Player : MonoBehaviour
         generalState.FixedUpdate(this);
     }
 
-    public void reduceStemina(int consume)
-    {
-        if (currentSceneType == SceneTypeSetter.SceneType.Action)
-        {
-            if (currentSceneType == SceneTypeSetter.SceneType.Action)
-            {
-                if (stemina > consume)
-                {
-                    timer = maxTimer;
-                    stemina -= consume;
-                }
-                else if (stemina <= consume && stemina > 0)
-                {
-                    timer = maxTimer;
-                    stemina = 0;
-                }
-            }
-        }
-
-    }
+    //Actions and Behaviors, mostly input actions
 
     void OnMove(InputValue input)
     {
         horizontalMovement = input.Get<Vector2>().x;
         verticalMovement = input.Get<Vector2>().y;
     }
+    void OnMove_keyboard(InputValue input)
+    {
+        horizontalMovement = input.Get<Vector2>().x;
+        verticalMovement = input.Get<Vector2>().y;
+    }
 
     void OnInteract()
+    {
+        if (generalState == movementState)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.zero, 0, interactionLayerMask);
+            if (hit.collider != null)
+            {
+                switch (hit.collider.tag)
+                {
+                    case "Door":
+                        //DoorInteraction(hit.collider.gameObject);
+                        hit.collider.gameObject.GetComponent<Door>().interact();
+                        break;
+                    case "Npc":
+                        hit.collider.gameObject.GetComponent<NPC>().interact();
+                        break;
+                }
+            }
+        }
+        else if (generalState == dialogState)
+        {
+            GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>().next();
+        }
+    }
+    void OnInteract_keyboard()
     {
         if (generalState == movementState)
         {
@@ -252,47 +272,6 @@ public class Player : MonoBehaviour
             }
         }
     }
-
-    void OnQuit()
-    {
-        Application.Quit();
-    }
-
-    void OnMove_keyboard(InputValue input)
-    {
-        /*if (generalState == movementState)
-        {
-            horizontalMovement = input.Get<Vector2>().x;
-        }*/
-        horizontalMovement = input.Get<Vector2>().x;
-
-    }
-
-    void OnInteract_keyboard()
-    {
-        if (generalState == movementState)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.zero, 0, interactionLayerMask);
-            if (hit.collider != null)
-            {
-                switch (hit.collider.tag)
-                {
-                    case "Door":
-                        //DoorInteraction(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponent<Door>().interact();
-                        break;
-                    case "Npc":
-                        hit.collider.gameObject.GetComponent<NPC>().interact();
-                        break;
-                }
-            }
-        }
-        else if (generalState == dialogState)
-        {
-            GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>().next();
-        }
-    }
-
     void OnJump_keyboard()
     {
         if (generalState == movementState)
@@ -304,42 +283,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnQuit_keyboard()
+    void OnQuit()
     {
         Application.Quit();
     }
-
-    void OnLightAttack_keyboard()
+    void OnQuit_keyboard()
     {
-        if (currentSceneType == SceneTypeSetter.SceneType.Action)
-        {
-            if (isGrounded)
-            {
-                if (generalState != attackStateLight && generalState != dashState)
-                {
-                    if (attackTimer <= 0f && stemina > 0)
-                        ChangeGeneralState(attackStateLight);
-                }
-                else
-                {
-                    if (canInput && stemina > 0)
-                    {
-                        canInput = false;
-                        comboed = true;
-                        nextCombo();
-                    }
-                }
-            }
-            else
-            {
-                if (generalState != attackStateLight && generalState != dashState)
-                {
-                    if (attackTimer <= 0f && stemina > 0)
-                        ChangeGeneralState(attackStateLight);
-                }
-            }
-        }
-
+        Application.Quit();
     }
 
     void OnLightAttack()
@@ -348,7 +298,7 @@ public class Player : MonoBehaviour
         {
             if (isGrounded)
             {
-                if (generalState != attackStateLight && generalState != dashState)
+                if (generalState != attackStateLight && generalState != dashState && generalState != hurtState)
                 {
                     if (attackTimer <= 0f && stemina > 0)
                         ChangeGeneralState(attackStateLight);
@@ -365,7 +315,39 @@ public class Player : MonoBehaviour
             }
             else
             {
-                if (generalState != attackStateLight && generalState != dashState)
+                if (generalState != attackStateLight && generalState != dashState && generalState != hurtState)
+                {
+                    if (attackTimer <= 0f && stemina > 0)
+                        ChangeGeneralState(attackStateLight);
+                }
+            }
+        }
+
+    }
+    void OnLightAttack_keyboard()
+    {
+        if (currentSceneType == SceneTypeSetter.SceneType.Action)
+        {
+            if (isGrounded)
+            {
+                if (generalState != attackStateLight && generalState != dashState && generalState != hurtState)
+                {
+                    if (attackTimer <= 0f && stemina > 0)
+                        ChangeGeneralState(attackStateLight);
+                }
+                else
+                {
+                    if (canInput && stemina > 0)
+                    {
+                        canInput = false;
+                        comboed = true;
+                        nextCombo();
+                    }
+                }
+            }
+            else
+            {
+                if (generalState != attackStateLight && generalState != dashState && generalState != hurtState)
                 {
                     if (attackTimer <= 0f && stemina > 0)
                         ChangeGeneralState(attackStateLight);
@@ -375,13 +357,13 @@ public class Player : MonoBehaviour
 
     }
 
-    void OnHeavyAttack_keyboard()
+    void OnHeavyAttack()
     {
         if (currentSceneType == SceneTypeSetter.SceneType.Action)
         {
             if (isGrounded)
             {
-                if (generalState != attackStateHeavy && generalState != dashState)
+                if (generalState != attackStateHeavy && generalState != dashState && generalState != hurtState)
                 {
                     if (attackTimer <= 0f && stemina > 0)
                     {
@@ -391,7 +373,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                if (generalState != attackStateHeavy && generalState != dashState)
+                if (generalState != attackStateHeavy && generalState != dashState && generalState != hurtState)
                 {
                     if (attackTimer <= 0f && stemina > 0)
                         ChangeGeneralState(attackStateHeavy);
@@ -399,14 +381,13 @@ public class Player : MonoBehaviour
             }
         }
     }
-
-    void OnHeavyAttack()
+    void OnHeavyAttack_keyboard()
     {
         if (currentSceneType == SceneTypeSetter.SceneType.Action)
         {
             if (isGrounded)
             {
-                if (generalState != attackStateHeavy && generalState != dashState)
+                if (generalState != attackStateHeavy && generalState != dashState && generalState != hurtState)
                 {
                     if (attackTimer <= 0f && stemina > 0)
                     {
@@ -416,7 +397,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                if (generalState != attackStateHeavy && generalState != dashState)
+                if (generalState != attackStateHeavy && generalState != dashState && generalState != hurtState)
                 {
                     if (attackTimer <= 0f && stemina > 0)
                         ChangeGeneralState(attackStateHeavy);
@@ -434,13 +415,61 @@ public class Player : MonoBehaviour
         }
 
     }
-
     void OnDash_keyboard()
     {
         if (isGrounded && generalState != dashState && stemina > 0 && generalState != dialogState)
         {
             ChangeGeneralState(dashState);
             playerAnim.SetTrigger(dashHash);
+        }
+
+    }
+
+    
+    public void OnHurt(int damage, float emX, float knockStr)
+    {
+        knockBack(emX, knockStr);
+        ChangeGeneralState(hurtState);
+        playerAnim.SetTrigger("isHurt");
+        bloodEffect.OnPlayRandom();
+        StartCoroutine(hitPause(5));
+        if(allowDamage && Hp > 0)
+        {
+            Hp -= damage;
+            allowDamage = false;
+        }
+        
+    }
+
+    public void endHurt()
+    {
+        playerRB.velocity = Vector2.zero;
+        allowDamage = true;
+        ChangeGeneralState(movementState);
+    }
+
+    public void knockBack(float emX, float strength)
+    {
+        playerRB.velocity = new Vector2(Mathf.Sign(transform.position.x - emX), 0) * strength;
+    }
+
+    public void reduceStemina(int consume)
+    {
+        if (currentSceneType == SceneTypeSetter.SceneType.Action)
+        {
+            if (currentSceneType == SceneTypeSetter.SceneType.Action)
+            {
+                if (stemina > consume)
+                {
+                    timer = maxTimer;
+                    stemina -= consume;
+                }
+                else if (stemina <= consume && stemina > 0)
+                {
+                    timer = maxTimer;
+                    stemina = 0;
+                }
+            }
         }
 
     }
@@ -500,8 +529,15 @@ public class Player : MonoBehaviour
         {
             stemina++;
             yield return new WaitForSeconds(reStmTimeWindow);
-            //stemina++;
         }
         reSTMStarted = false;
+    }
+
+    IEnumerator hitPause(int duration)
+    {
+        float pauseTime = duration / 60f;
+        Time.timeScale = 0.2f;
+        yield return new WaitForSecondsRealtime(pauseTime);
+        Time.timeScale = 1;
     }
 }
