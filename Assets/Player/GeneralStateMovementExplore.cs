@@ -9,7 +9,7 @@ public class GeneralStateMovementExplore : GeneralStateBase
         //pl.comboCount = 0;
 
         pl.transform.SetParent(GameObject.FindGameObjectWithTag("ExploreParentCube").transform);
-        pl.gStateShow = Player.generalStates.move;
+        pl.gStateShow = Player.generalStates.move_Explore;
     }
 
     public override void Update(Player pl)

@@ -17,6 +17,10 @@ public class SceneTypeSetter : MonoBehaviour
     void Start()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().currentSceneType = mySceneType;
+        if(mySceneType == SceneType.Action)
+        {
+            GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(GameObject.FindGameObjectWithTag("Player").transform.position.x, GameObject.FindGameObjectWithTag("Player").transform.position.y, 0.15f);
+        }
     }
 
     

@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class dummyScene : MonoBehaviour
 {
+    [SerializeField] private string firstSceneName;
     // Start is called before the first frame update
     void Start()
     {
-        SceneManager.LoadScene("Street");
+        SceneManager.LoadScene(firstSceneName);
     }
 
     // Update is called once per frame

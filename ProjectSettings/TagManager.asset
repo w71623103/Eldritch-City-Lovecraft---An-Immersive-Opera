@@ -12,6 +12,8 @@ TagManager:
   - Door
   - Npc
   - DialogSystem
+  - ExploreParentCube
+  - HpBar
   layers:
   - Default
   - TransparentFX

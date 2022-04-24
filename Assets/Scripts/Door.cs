@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class Door : MonoBehaviour
 {
+    [SerializeField] private SceneTypeSetter.SceneType thisScene;
     [SerializeField] private GameObject buttonIcon;
     [SerializeField] private string sceneName;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +38,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    public void interact()
+    public void interact(GameObject pl)
     {
         SceneManager.LoadScene(sceneName);
     }    

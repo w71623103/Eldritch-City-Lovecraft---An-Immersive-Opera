@@ -142,6 +142,7 @@ public class Player : MonoBehaviour
         stemina = maxStemina;
         Hp = maxHp;
 
+        
     }
 
     // Update is called once per frame
@@ -154,18 +155,23 @@ public class Player : MonoBehaviour
                 playerAnim.SetLayerWeight(2, 0);
                 playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = actionMat;
+                transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
+                stmBar = GameObject.FindGameObjectWithTag("StmBar");
+                hpBar = GameObject.FindGameObjectWithTag("HpBar");
                 break;
             case SceneTypeSetter.SceneType.Street:
                 playerAnim.SetLayerWeight(1, 0);
                 playerAnim.SetLayerWeight(2, 1);
                 playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = streetMat;
+                transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
                 break;
             case SceneTypeSetter.SceneType.Explore:
                 playerAnim.SetLayerWeight(1, 0);
                 playerAnim.SetLayerWeight(2, 0);
                 playerAnim.SetLayerWeight(3, 1);
                 playerSpr.material = exploreMat;
+                playerRB.velocity = Vector2.zero;
                 ChangeGeneralState(exploreMoveState);
                 break;
             default:
@@ -224,7 +230,7 @@ public class Player : MonoBehaviour
                 {
                     case "Door":
                         //DoorInteraction(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponent<Door>().interact();
+                        hit.collider.gameObject.GetComponent<Door>().interact(this.gameObject);
                         break;
                     case "Npc":
                         hit.collider.gameObject.GetComponent<NPC>().interact();
@@ -235,6 +241,26 @@ public class Player : MonoBehaviour
         else if (generalState == dialogState)
         {
             GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>().next();
+        }
+        else if (generalState == exploreMoveState)
+        {
+            RaycastHit hit;
+            bool rayHit = Physics.Raycast(transform.parent.position, Vector3.back, out hit, 2f, interactionLayerMask);
+            Debug.Log((hit.collider!=null).ToString());
+            //Debug.Log(hit.collider.name);
+            if (hit.collider != null)
+            {
+                switch (hit.collider.tag)
+                {
+                    case "Door":
+                        //DoorInteraction(hit.collider.gameObject);
+                        hit.collider.gameObject.GetComponent<Door3D>().interact(gameObject);
+                        break;
+                    case "Npc":
+                        hit.collider.gameObject.GetComponent<NPC>().interact();
+                        break;
+                }
+            }
         }
     }
     void OnInteract_keyboard()
@@ -248,7 +274,7 @@ public class Player : MonoBehaviour
                 {
                     case "Door":
                         //DoorInteraction(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponent<Door>().interact();
+                        hit.collider.gameObject.GetComponent<Door>().interact(this.gameObject);
                         break;
                     case "Npc":
                         hit.collider.gameObject.GetComponent<NPC>().interact();
