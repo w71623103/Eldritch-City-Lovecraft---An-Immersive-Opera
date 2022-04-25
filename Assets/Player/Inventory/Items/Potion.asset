@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e20fc4d76cbc2349a00178985583356, type: 3}
+  m_Name: Potion
+  m_EditorClassIdentifier: 
+  itemName: Potion
+  icon: {fileID: 1848363874, guid: 3aeb92a9c23ee6f4e8819155b1aa3b1a, type: 3}
+  type: 0
+  heldNum: 0
+  itemInfo: A potion that can be used in the Immersive Opera, labeled with "The Yellow
+    King"
