@@ -250,6 +250,10 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -865970023
       objectReference: {fileID: 0}
+    - target: {fileID: 5255828872070606036, guid: ee113c81a6c8ebd44a38d83e908cc1fc, type: 3}
+      propertyPath: m_TagString
+      value: StmBar
+      objectReference: {fileID: 0}
     - target: {fileID: 5255828872070606039, guid: ee113c81a6c8ebd44a38d83e908cc1fc, type: 3}
       propertyPath: m_LocalScale.x
       value: 120
@@ -260,7 +264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5255828872070606041, guid: ee113c81a6c8ebd44a38d83e908cc1fc, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5255828872070606041, guid: ee113c81a6c8ebd44a38d83e908cc1fc, type: 3}
       propertyPath: m_Color.g
@@ -268,7 +272,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5255828872070606041, guid: ee113c81a6c8ebd44a38d83e908cc1fc, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.19275069
       objectReference: {fileID: 0}
     - target: {fileID: 5255828872070606041, guid: ee113c81a6c8ebd44a38d83e908cc1fc, type: 3}
       propertyPath: m_SortingLayer
@@ -3102,6 +3106,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cultist
       objectReference: {fileID: 0}
+    - target: {fileID: 1776612944648144594, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
+      propertyPath: maxHp
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1776612944648144596, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -3146,6 +3154,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1776612944648144598, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
+      propertyPath: m_GravityScale
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1776612944864977153, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
       propertyPath: knock
       value: 0
@@ -3153,6 +3165,14 @@ PrefabInstance:
     - target: {fileID: 1776612944864977153, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
       propertyPath: AttackDmg
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219027602301387638, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514638350240737189, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bea583423cad454c911b7515f0a4cef, type: 3}
@@ -3215,7 +3235,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9647979, y: 1}
+    m_SensorSize: {x: 1.9667319, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

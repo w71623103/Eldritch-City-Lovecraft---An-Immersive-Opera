@@ -461,7 +461,8 @@ public class Player : MonoBehaviour
         StartCoroutine(hitPause(5));
         if(allowDamage && Hp > 0)
         {
-            Hp -= damage;
+            if (Hp > damage) Hp -= damage;
+            else Hp = 0;
             allowDamage = false;
         }
         

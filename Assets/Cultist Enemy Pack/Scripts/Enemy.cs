@@ -18,6 +18,12 @@ public class Enemy : MonoBehaviour
 
     public bool seePlayer = false;
 
+    [Header("HP")]
+    public int Hp;
+    public int maxHp;
+    public bool allowDamage = true;
+    public GameObject hpBar;
+
     [Header("Components")]
     public Rigidbody2D enemyRB;
     public Animator enemyAnim;
@@ -38,7 +44,7 @@ public class Enemy : MonoBehaviour
     public int movingHash;
     public int jumpHash;
     public int groundHash;
-
+    public int dieTriggerHash;
     //private int leftHash;
 
     /*public Material leftMat;
@@ -82,24 +88,32 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        Hp = maxHp;
         generalState = movementState;
         enemyRB = GetComponent<Rigidbody2D>();
         enemyAnim = GetComponent<Animator>();
         movingHash = Animator.StringToHash("isMoving");
         jumpHash = Animator.StringToHash("jumpSpeed");
         groundHash = Animator.StringToHash("isGrounded");
+        dieTriggerHash = Animator.StringToHash("die");
         //interactionLayerMask = LayerMask.GetMask("Interactable");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Hp <= 0)
+        {
+            enemyAnim.SetTrigger(dieTriggerHash);
+        }
         generalState.Update(this);
 
         if (seePlayer && generalState != attackStateLight && generalState != hurtState)
             OnLightAttack();
         /*else
             endAttack();*/
+        //HP Bar
+        hpBar.GetComponent<UIBar>().percent = ((float)Hp / (float)maxHp);
     }
 
     private void FixedUpdate()
@@ -170,6 +184,12 @@ public class Enemy : MonoBehaviour
         bloodEffect.OnPlayRandom();
         //hitEffect.OnPlayRandom();
         StartCoroutine(hitPause(5));
+        if (allowDamage && Hp > 0)
+        {
+            if (Hp > damage) Hp -= damage;
+            else Hp = 0;
+            allowDamage = false;
+        }
     }
 
     //Attack Support Methods
@@ -217,12 +237,18 @@ public class Enemy : MonoBehaviour
 
     public void endHurt()
     {
+        allowDamage = true;
         ChangeGeneralState(movementState);
     }
 
     public void activateAttackCol()
     {
         transform.Find("attackCol").gameObject.SetActive(true);
+    }
+
+    public void die()
+    {
+        Destroy(gameObject);
     }
 
     //Unity Massages
