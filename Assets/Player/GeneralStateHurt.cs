@@ -16,5 +16,7 @@ public class GeneralStateHurt : GeneralStateBase
     { }
 
     public override void LeaveState(Player pl)
-    { }
+    {
+        
+    }
 }

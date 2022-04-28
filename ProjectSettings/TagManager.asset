@@ -14,6 +14,8 @@ TagManager:
   - DialogSystem
   - ExploreParentCube
   - HpBar
+  - Inventory
+  - EnemyMovementCommand
   layers:
   - Default
   - TransparentFX
@@ -27,7 +29,7 @@ TagManager:
   - EnemyHate
   - EnemyAttackEffect
   - Interactable
-  - 
+  - EnemyMoveCommand
   - 
   - 
   - 

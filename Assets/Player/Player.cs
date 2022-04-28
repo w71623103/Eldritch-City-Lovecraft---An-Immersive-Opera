@@ -18,9 +18,12 @@ public class Player : MonoBehaviour
 
     public generalStates gStateShow = generalStates.move;
 
+    [SerializeField] private GameObject _inventory;
+    [SerializeField] private Inventory inventory;
+
     [Header("SceneType")]
     public SceneTypeSetter.SceneType currentSceneType;
-    public float zPos_2D;
+    //public float zPos_2D;
 
     [Header("Materials")]
     [SerializeField] private Material actionMat;
@@ -122,6 +125,7 @@ public class Player : MonoBehaviour
     {
         generalState = movementState;
         DontDestroyOnLoad(this);
+        inventory = _inventory.GetComponent<Inventory>();
         playerRB = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
         playerSpr = GetComponent<SpriteRenderer>();
@@ -155,7 +159,7 @@ public class Player : MonoBehaviour
                 playerAnim.SetLayerWeight(2, 0);
                 playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = actionMat;
-                transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
+                //transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
                 stmBar = GameObject.FindGameObjectWithTag("StmBar");
                 hpBar = GameObject.FindGameObjectWithTag("HpBar");
                 break;
@@ -164,7 +168,7 @@ public class Player : MonoBehaviour
                 playerAnim.SetLayerWeight(2, 1);
                 playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = streetMat;
-                transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
+                //transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
                 break;
             case SceneTypeSetter.SceneType.Explore:
                 playerAnim.SetLayerWeight(1, 0);
@@ -213,11 +217,6 @@ public class Player : MonoBehaviour
         horizontalMovement = input.Get<Vector2>().x;
         verticalMovement = input.Get<Vector2>().y;
     }
-    void OnMove_keyboard(InputValue input)
-    {
-        horizontalMovement = input.Get<Vector2>().x;
-        verticalMovement = input.Get<Vector2>().y;
-    }
 
     void OnInteract()
     {
@@ -234,6 +233,8 @@ public class Player : MonoBehaviour
                         break;
                     case "Npc":
                         hit.collider.gameObject.GetComponent<NPC>().interact();
+                        break;
+                    case "Item":
                         break;
                 }
             }
@@ -263,42 +264,8 @@ public class Player : MonoBehaviour
             }
         }
     }
-    void OnInteract_keyboard()
-    {
-        if (generalState == movementState)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.zero, 0, interactionLayerMask);
-            if (hit.collider != null)
-            {
-                switch (hit.collider.tag)
-                {
-                    case "Door":
-                        //DoorInteraction(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponent<Door>().interact(this.gameObject);
-                        break;
-                    case "Npc":
-                        hit.collider.gameObject.GetComponent<NPC>().interact();
-                        break;
-                }
-            }
-        }
-        else if (generalState == dialogState)
-        {
-            GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>().next();
-        }
-    }
 
     void OnJump()
-    {
-        if (generalState == movementState)
-        {
-            if (isGrounded)
-            {
-                playerRB.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
-            }
-        }
-    }
-    void OnJump_keyboard()
     {
         if (generalState == movementState)
         {
@@ -313,44 +280,8 @@ public class Player : MonoBehaviour
     {
         Application.Quit();
     }
-    void OnQuit_keyboard()
-    {
-        Application.Quit();
-    }
 
     void OnLightAttack()
-    {
-        if (currentSceneType == SceneTypeSetter.SceneType.Action)
-        {
-            if (isGrounded)
-            {
-                if (generalState != attackStateLight && generalState != dashState && generalState != hurtState)
-                {
-                    if (attackTimer <= 0f && stemina > 0)
-                        ChangeGeneralState(attackStateLight);
-                }
-                else
-                {
-                    if (canInput && stemina > 0)
-                    {
-                        canInput = false;
-                        comboed = true;
-                        nextCombo();
-                    }
-                }
-            }
-            else
-            {
-                if (generalState != attackStateLight && generalState != dashState && generalState != hurtState)
-                {
-                    if (attackTimer <= 0f && stemina > 0)
-                        ChangeGeneralState(attackStateLight);
-                }
-            }
-        }
-
-    }
-    void OnLightAttack_keyboard()
     {
         if (currentSceneType == SceneTypeSetter.SceneType.Action)
         {
@@ -407,30 +338,6 @@ public class Player : MonoBehaviour
             }
         }
     }
-    void OnHeavyAttack_keyboard()
-    {
-        if (currentSceneType == SceneTypeSetter.SceneType.Action)
-        {
-            if (isGrounded)
-            {
-                if (generalState != attackStateHeavy && generalState != dashState && generalState != hurtState)
-                {
-                    if (attackTimer <= 0f && stemina > 0)
-                    {
-                        ChangeGeneralState(attackStateHeavy);
-                    }
-                }
-            }
-            else
-            {
-                if (generalState != attackStateHeavy && generalState != dashState && generalState != hurtState)
-                {
-                    if (attackTimer <= 0f && stemina > 0)
-                        ChangeGeneralState(attackStateHeavy);
-                }
-            }
-        }
-    }
 
     void OnDash()
     {
@@ -441,17 +348,12 @@ public class Player : MonoBehaviour
         }
 
     }
-    void OnDash_keyboard()
-    {
-        if (isGrounded && generalState != dashState && stemina > 0 && generalState != dialogState)
-        {
-            ChangeGeneralState(dashState);
-            playerAnim.SetTrigger(dashHash);
-        }
 
+    void OnUseItem()
+    {
+        inventory.useCurrentItem();
     }
 
-    
     public void OnHurt(int damage, float emX, float knockStr)
     {
         knockBack(emX, knockStr);
@@ -499,6 +401,11 @@ public class Player : MonoBehaviour
             }
         }
 
+    }
+
+    public void showHealAnim()
+    {
+        
     }
 
     //Attack Support Methods

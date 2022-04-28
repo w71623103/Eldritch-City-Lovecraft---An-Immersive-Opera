@@ -17,7 +17,7 @@ public class AttackCol : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             collision.GetComponent<Enemy>().OnHurt(AttackDmg, transform.position.x, knock);
-            collision.GetComponent<Animator>().speed = 0.5f;
+            //collision.GetComponent<Animator>().speed = 0.5f;
             //transform.parent.GetComponent<Animator>().speed = 0.5f;
         }
     }

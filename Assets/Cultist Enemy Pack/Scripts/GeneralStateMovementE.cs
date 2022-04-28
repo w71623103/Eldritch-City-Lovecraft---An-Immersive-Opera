@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class GeneralStateMovementE : GeneralStateBaseE
 {
+    private int enemyMoveCLayerMask;
+    private Vector2 movDir;
     public override void EnterState(Enemy em)
     {
         //em.comboCount = 0;
+        enemyMoveCLayerMask = LayerMask.GetMask("EnemyMoveCommand");
         em.gStateShow = Enemy.generalStates.move;
     }
 
     public override void Update(Enemy em)
     {
+        
         if (em.attackTimer > 0f) em.attackTimer -= Time.deltaTime;
         em.enemyAnim.SetBool(em.movingHash, em.horizontalMovement != 0.0f);
         em.enemyAnim.SetFloat(em.jumpHash, em.enemyRB.velocity.y);
@@ -30,7 +34,20 @@ public class GeneralStateMovementE : GeneralStateBaseE
         else
             em.transform.localScale = new Vector3(scale.x > 0 || em.horizontalMovement == 0 ? scale.x : -scale.x, scale.y, scale.z);
 
-        //======================================================================================================================
+        //=====================================================================================================================
+
+        //Movement AI==========================================================================================================
+        if (em.transform.localScale.x > 0) movDir = Vector2.left;
+        else movDir = Vector2.right;
+        RaycastHit2D hit = Physics2D.Raycast(em.transform.position, movDir, 1f, enemyMoveCLayerMask);
+        Debug.DrawRay(em.transform.position, movDir, Color.blue);
+        if (hit.collider != null)
+        {
+            if (hit.collider.CompareTag("EnemyMovementCommand"))
+            {
+                em.horizontalMovement *= -1;
+            }
+        }
     }
 
     public override void FixedUpdate(Enemy em)

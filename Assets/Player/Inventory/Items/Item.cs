@@ -7,13 +7,16 @@ public class Item : ScriptableObject
 {
     public enum ItemType
     {
-        consumable,
+        usable,
         important,
     }
     public string itemName;
     public Sprite icon;
     public ItemType type;
     public int heldNum;
+    public int maxHeldNum;
+    //public itemEffect usageEffect;
+
     [TextArea]
     public string itemInfo;
 }

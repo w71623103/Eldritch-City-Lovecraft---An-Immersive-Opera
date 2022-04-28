@@ -13,17 +13,19 @@ public class Foreground : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") || collision.CompareTag("Enemy"))
         {
-            spr.color = new Color(255, 255, 255, 10);
+            Debug.Log("1111");
+            spr.color = new Color(255, 255, 255, 0.5f);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") || collision.CompareTag("Enemy"))
         {
-            spr.color = new Color(255, 255, 255, 100);
+            Debug.Log("2222");
+            spr.color = new Color(255, 255, 255, 1f);
         }
     }
 }

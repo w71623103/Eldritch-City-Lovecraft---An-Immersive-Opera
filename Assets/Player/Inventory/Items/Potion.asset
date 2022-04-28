@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Potion
   m_EditorClassIdentifier: 
   itemName: Potion
-  icon: {fileID: 1848363874, guid: 3aeb92a9c23ee6f4e8819155b1aa3b1a, type: 3}
+  icon: {fileID: 741911484, guid: 6a75843503c660a41a0846be6438fede, type: 3}
   type: 0
-  heldNum: 0
+  heldNum: 12
+  maxHeldNum: 12
   itemInfo: A potion that can be used in the Immersive Opera, labeled with "The Yellow
     King"

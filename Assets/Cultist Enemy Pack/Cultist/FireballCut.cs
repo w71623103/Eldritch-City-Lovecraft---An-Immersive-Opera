@@ -19,6 +19,7 @@ public class FireballCut : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
+            //
             //GetComponent<BoxCollider2D>().enabled = false;
             anim.SetTrigger(impactHash);
             collision.gameObject.GetComponent<Player>().OnHurt(AttackDmg, transform.position.x, knock);

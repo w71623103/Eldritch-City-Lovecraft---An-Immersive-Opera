@@ -25,6 +25,6 @@ public class GeneralStateAttackHurtE : GeneralStateBaseE
 
     public override void LeaveState(Enemy em)
     {
-        
+        em.horizontalMovement = em.transform.localScale.x * -1;
     }
 }

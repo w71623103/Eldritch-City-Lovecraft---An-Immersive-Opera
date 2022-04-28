@@ -133,7 +133,7 @@ public class Enemy : MonoBehaviour
         {
             if(isGrounded)
             {
-                enemyRB.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
+                enemyRB.AddForce(Vector2.up * jumpSpeed * enemyRB.mass, ForceMode2D.Impulse);
             }
         }
     }
