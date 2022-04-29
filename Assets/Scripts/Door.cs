@@ -38,7 +38,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    public void interact(GameObject pl)
+    public void interact()
     {
         SceneManager.LoadScene(sceneName);
     }    

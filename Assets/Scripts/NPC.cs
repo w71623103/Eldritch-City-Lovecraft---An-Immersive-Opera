@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPC : MonoBehaviour
+public abstract class NPC : MonoBehaviour
 {
-    [SerializeField] private GameObject dialog;
-    [SerializeField] private GameObject buttonIcon;
+    [SerializeField] protected GameObject dialog;
+    [SerializeField] protected GameObject buttonIcon;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,10 +15,13 @@ public class NPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        /*if(dialog.activeSelf == false)
+        {
+            Debug.Log("die");
+        }*/
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
@@ -27,7 +30,7 @@ public class NPC : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    protected void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
@@ -36,9 +39,10 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public void interact()
+    public abstract void interact();
+
+    /*public abstract void interact()
     {
         dialog.SetActive(true);
-        //GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().ChangeGeneralState(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().dialogState);
-    }
+    }*/
 }

@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour
     public float attackTimer = 0f;
 
     [Header("StateMachine")]
-    private GeneralStateBaseE generalState;
+    protected GeneralStateBaseE generalState;
     public GeneralStateBaseE movementState = new GeneralStateMovementE();
     public GeneralStateAttackE attackStateLight = new GeneralStateAttackE();
     public GeneralStateAttackEndE attackEndState = new GeneralStateAttackEndE();
@@ -116,7 +116,7 @@ public class Enemy : MonoBehaviour
         hpBar.GetComponent<UIBar>().percent = ((float)Hp / (float)maxHp);
     }
 
-    private void FixedUpdate()
+    protected void FixedUpdate()
     {
         generalState.FixedUpdate(this);
     }
@@ -252,7 +252,7 @@ public class Enemy : MonoBehaviour
     }
 
     //Unity Massages
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
@@ -260,7 +260,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    protected void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
@@ -268,7 +268,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    protected void OnCollisionStay2D(Collision2D collision)
     {
         if(collision.gameObject.CompareTag("playerLandCol"))
         {

@@ -15,7 +15,7 @@ public class Foreground : MonoBehaviour
     {
         if (collision.CompareTag("Player") || collision.CompareTag("Enemy"))
         {
-            Debug.Log("1111");
+            
             spr.color = new Color(255, 255, 255, 0.5f);
         }
     }
@@ -24,7 +24,7 @@ public class Foreground : MonoBehaviour
     {
         if (collision.CompareTag("Player") || collision.CompareTag("Enemy"))
         {
-            Debug.Log("2222");
+            
             spr.color = new Color(255, 255, 255, 1f);
         }
     }

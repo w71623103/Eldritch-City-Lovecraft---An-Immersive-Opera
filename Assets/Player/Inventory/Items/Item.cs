@@ -15,6 +15,7 @@ public class Item : ScriptableObject
     public ItemType type;
     public int heldNum;
     public int maxHeldNum;
+    public int numWhenCollect;
     //public itemEffect usageEffect;
 
     [TextArea]

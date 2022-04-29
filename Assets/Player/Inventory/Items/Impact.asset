@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e20fc4d76cbc2349a00178985583356, type: 3}
   m_Name: Impact
   m_EditorClassIdentifier: 
-  itemName: Ulitimate Impact
-  icon: {fileID: 0}
+  itemName: Impact
+  icon: {fileID: 426619354, guid: 3aeb92a9c23ee6f4e8819155b1aa3b1a, type: 3}
   type: 0
   heldNum: 0
   maxHeldNum: 1
+  numWhenCollect: 1
   itemInfo: Release an impact that is capable of kill enemy and break wall.

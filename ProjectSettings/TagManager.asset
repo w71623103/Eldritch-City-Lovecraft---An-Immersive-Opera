@@ -16,6 +16,8 @@ TagManager:
   - HpBar
   - Inventory
   - EnemyMovementCommand
+  - Item
+  - GameManager
   layers:
   - Default
   - TransparentFX

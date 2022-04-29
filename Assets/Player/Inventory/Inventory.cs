@@ -26,10 +26,13 @@ public class Inventory : MonoBehaviour
     {
         if(itemList.Contains(newitem))
         {
-            if(newitem.heldNum < newitem.maxHeldNum) newitem.heldNum++;
+            Debug.Log("increase num");
+            if(newitem.heldNum < newitem.maxHeldNum) newitem.heldNum += newitem.numWhenCollect;
         }else
         {
+            Debug.Log("add new");
             itemList.Add(newitem);
+            newitem.heldNum += newitem.numWhenCollect;
         }
     }
 
@@ -41,7 +44,7 @@ public class Inventory : MonoBehaviour
 
     public void prevItem()
     {
-        if (currentItem > 1) currentItem--;
+        if (currentItem > 0) currentItem--;
         else currentItem = itemList.Count - 1;
     }
 

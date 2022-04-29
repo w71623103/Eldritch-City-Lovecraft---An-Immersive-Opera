@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
     public int attackLightAirHash;
     public int attackHeavyHash;
     public int attackHeavyAirHash;
+    public int attackImpactHash;
     public int dashHash;
     public int hurtHash;
 
@@ -87,6 +88,7 @@ public class Player : MonoBehaviour
     public GeneralStateDash dashState = new GeneralStateDash();
     public GeneralStateMovementExplore exploreMoveState = new GeneralStateMovementExplore();
     public GeneralStateHurt hurtState = new GeneralStateHurt();
+    public GeneralStateAttackImpact attackStateImpact = new GeneralStateAttackImpact();
 
     [Header("Stemima")]
     private float timer = 0f;
@@ -137,6 +139,7 @@ public class Player : MonoBehaviour
         attackLightAirHash = Animator.StringToHash("AttackStateLightAir");
         attackHeavyAirHash = Animator.StringToHash("AttackStateHeavyAir");
         attackHeavyHash = Animator.StringToHash("AttackStateHeavy");
+        attackImpactHash = Animator.StringToHash("AttackStateImpact");
         dashHash = Animator.StringToHash("isDash");
         hurtHash = Animator.StringToHash("isHurt");
 
@@ -152,12 +155,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playerAnim.SetFloat("hSpeed", Mathf.Abs(horizontalMovement));
         switch (currentSceneType)
         {
             case SceneTypeSetter.SceneType.Action:
                 playerAnim.SetLayerWeight(1, 1);
                 playerAnim.SetLayerWeight(2, 0);
-                playerAnim.SetLayerWeight(3, 0);
+                //playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = actionMat;
                 //transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
                 stmBar = GameObject.FindGameObjectWithTag("StmBar");
@@ -166,22 +170,22 @@ public class Player : MonoBehaviour
             case SceneTypeSetter.SceneType.Street:
                 playerAnim.SetLayerWeight(1, 0);
                 playerAnim.SetLayerWeight(2, 1);
-                playerAnim.SetLayerWeight(3, 0);
-                playerSpr.material = streetMat;
+                //playerAnim.SetLayerWeight(3, 0);
+                //playerSpr.material = streetMat;
                 //transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
                 break;
-            case SceneTypeSetter.SceneType.Explore:
+            /*case SceneTypeSetter.SceneType.Explore:
                 playerAnim.SetLayerWeight(1, 0);
                 playerAnim.SetLayerWeight(2, 0);
                 playerAnim.SetLayerWeight(3, 1);
                 playerSpr.material = exploreMat;
                 playerRB.velocity = Vector2.zero;
                 ChangeGeneralState(exploreMoveState);
-                break;
+                break;*/
             default:
                 playerAnim.SetLayerWeight(1, 1);
                 playerAnim.SetLayerWeight(2, 0);
-                playerAnim.SetLayerWeight(3, 0);
+                //playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = actionMat;
                 break;
         }
@@ -229,12 +233,13 @@ public class Player : MonoBehaviour
                 {
                     case "Door":
                         //DoorInteraction(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponent<Door>().interact(this.gameObject);
+                        hit.collider.gameObject.GetComponent<Door>().interact();
                         break;
                     case "Npc":
                         hit.collider.gameObject.GetComponent<NPC>().interact();
                         break;
                     case "Item":
+                        hit.collider.gameObject.GetComponent<ItemCollect>().interact();
                         break;
                 }
             }
@@ -242,26 +247,6 @@ public class Player : MonoBehaviour
         else if (generalState == dialogState)
         {
             GameObject.FindGameObjectWithTag("DialogSystem").GetComponent<DialogSystem>().next();
-        }
-        else if (generalState == exploreMoveState)
-        {
-            RaycastHit hit;
-            bool rayHit = Physics.Raycast(transform.parent.position, Vector3.back, out hit, 2f, interactionLayerMask);
-            Debug.Log((hit.collider!=null).ToString());
-            //Debug.Log(hit.collider.name);
-            if (hit.collider != null)
-            {
-                switch (hit.collider.tag)
-                {
-                    case "Door":
-                        //DoorInteraction(hit.collider.gameObject);
-                        hit.collider.gameObject.GetComponent<Door3D>().interact(gameObject);
-                        break;
-                    case "Npc":
-                        hit.collider.gameObject.GetComponent<NPC>().interact();
-                        break;
-                }
-            }
         }
     }
 
@@ -339,6 +324,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void OnImpact()
+    {
+        if (currentSceneType == SceneTypeSetter.SceneType.Action)
+        {
+            if (generalState != attackStateImpact && generalState != dashState && generalState != hurtState)
+            {
+                ChangeGeneralState(attackStateImpact);
+            }
+        }
+    }
+
     void OnDash()
     {
         if (isGrounded && generalState != dashState && stemina > 0 && generalState != dialogState)
@@ -352,6 +348,16 @@ public class Player : MonoBehaviour
     void OnUseItem()
     {
         inventory.useCurrentItem();
+    }
+
+    void OnNextItem()
+    {
+        inventory.nextItem();
+    }
+
+    void OnPrevItem()
+    {
+        inventory.prevItem();
     }
 
     public void OnHurt(int damage, float emX, float knockStr)
