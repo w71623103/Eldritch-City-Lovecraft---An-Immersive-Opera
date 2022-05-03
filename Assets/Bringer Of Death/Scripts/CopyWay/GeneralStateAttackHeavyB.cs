@@ -23,7 +23,8 @@ public class GeneralStateAttackHeavyB : GeneralStateBaseB
         {
             pl.playerAnim.SetInteger("AttackStateLight", 0);
         }*/
-        armorPercent = db.armor / db.maxArmor;
+        armorPercent = (float) db.armor / (float) db.maxArmor;
+        Debug.Log(armorPercent);
         db.armorBar.GetComponent<UIBar>().percent = (armorPercent);
         if (db.armor <= 0) db.ChangeGeneralState(db.movementState);
     }
