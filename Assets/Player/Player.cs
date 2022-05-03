@@ -41,11 +41,7 @@ public class Player : MonoBehaviour
     public float verticalMovement;
     public float hspeed;
     public float vspeed;
-    /*[SerializeField]*/
     public bool isLeft;
-    /*public GameObject[] LeftSensors;
-    public GameObject[] RightSensors;
-    public Sprite leftSpr;*/
     public bool isGrounded;
     public float jumpSpeed;
     private int interactionLayerMask;
@@ -64,14 +60,8 @@ public class Player : MonoBehaviour
 
     public int ActionLayerHash;
     public int StreetLayerHash;
-    public int ExploreLayerHash;
-    //private int leftHash;
-
-    /*public Material leftMat;
-    public Material rightMat;*/
-
+    
     [Header("Attack")]
-    //public AttackStateBase currentAttackState;
     public int comboCount = 0; //0 means not attacking
     public int maxComboCount = 2; //MAX attack actions (from 1 to max)
     public bool canInput = true;
@@ -148,7 +138,6 @@ public class Player : MonoBehaviour
 
         ActionLayerHash = Animator.StringToHash("Action Layer");
         StreetLayerHash = Animator.StringToHash("Street Layer");
-        ExploreLayerHash = Animator.StringToHash("Expolre Layer");
         stemina = maxStemina;
         Hp = maxHp;
 
@@ -158,46 +147,35 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //see if player is dead
         if(Hp <= 0) OnDie();
+        //set control scheme
         GameObject.Find("GameManager").GetComponent<GameManager>().controlScheme = plIn.currentControlScheme;
+        //set animation float, for the blend tree of walking and running
         playerAnim.SetFloat("hSpeed", Mathf.Abs(horizontalMovement));
+        //set layer of animation, player outlook is different in two types of scenes
         switch (currentSceneType)
         {
             case SceneTypeSetter.SceneType.Action:
                 playerAnim.SetLayerWeight(1, 1);
                 playerAnim.SetLayerWeight(2, 0);
-                //playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = actionMat;
-                //transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
                 stmBar = GameObject.FindGameObjectWithTag("StmBar");
                 hpBar = GameObject.FindGameObjectWithTag("HpBar");
                 break;
             case SceneTypeSetter.SceneType.Street:
                 playerAnim.SetLayerWeight(1, 0);
                 playerAnim.SetLayerWeight(2, 1);
-                //playerAnim.SetLayerWeight(3, 0);
-                //playerSpr.material = streetMat;
-                //transform.position = new Vector3(transform.position.x, transform.position.y, zPos_2D);
                 break;
-            /*case SceneTypeSetter.SceneType.Explore:
-                playerAnim.SetLayerWeight(1, 0);
-                playerAnim.SetLayerWeight(2, 0);
-                playerAnim.SetLayerWeight(3, 1);
-                playerSpr.material = exploreMat;
-                playerRB.velocity = Vector2.zero;
-                ChangeGeneralState(exploreMoveState);
-                break;*/
             default:
                 playerAnim.SetLayerWeight(1, 1);
                 playerAnim.SetLayerWeight(2, 0);
-                //playerAnim.SetLayerWeight(3, 0);
                 playerSpr.material = actionMat;
                 break;
         }
-
+        //let state decide what is going on in update
         generalState.Update(this);
-
-        //stm.text = stemina.ToString();
+        //stamina regenerate, stamina is misspelled to stemina
         if (timer >= 0f) timer -= Time.deltaTime;
         else
         {
@@ -220,7 +198,7 @@ public class Player : MonoBehaviour
     }
 
     //Actions and Behaviors, mostly input actions
-
+    //Some are not input but triggered with similar logic
     void OnMove(InputValue input)
     {
         horizontalMovement = input.Get<Vector2>().x;
@@ -371,7 +349,7 @@ public class Player : MonoBehaviour
         ChangeGeneralState(hurtState);
         playerAnim.SetTrigger("isHurt");
         bloodEffect.OnPlayRandom();
-        StartCoroutine(hitPause(5));
+        StartCoroutine(hitPause(2));
         if(allowDamage && Hp > 0)
         {
             if (Hp > damage) Hp -= damage;
@@ -386,6 +364,8 @@ public class Player : MonoBehaviour
         playerAnim.SetTrigger("dead");
     }
 
+
+    //support functions, mostly called by animation
     public void Rrestart()
     {
         SceneManager.LoadScene("Intro");
@@ -423,12 +403,6 @@ public class Player : MonoBehaviour
         }
 
     }
-
-/*    public void showHealAnim()
-    {
-        
-    }*/
-
     //Attack Support Methods
     public void nextCombo()
     {
