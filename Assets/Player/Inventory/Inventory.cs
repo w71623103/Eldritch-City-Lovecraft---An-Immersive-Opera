@@ -27,7 +27,8 @@ public class Inventory : MonoBehaviour
         if(itemList.Contains(newitem))
         {
             Debug.Log("increase num");
-            if(newitem.heldNum < newitem.maxHeldNum) newitem.heldNum += newitem.numWhenCollect;
+            if (newitem.heldNum + newitem.numWhenCollect <= newitem.maxHeldNum) newitem.heldNum += newitem.numWhenCollect;
+            else newitem.heldNum = newitem.maxHeldNum;
         }else
         {
             Debug.Log("add new");

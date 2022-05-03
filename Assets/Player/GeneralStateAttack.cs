@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//When start attack, the general state will become GeneralStateAttack and stays until the player no longer input light attack.
 public class GeneralStateAttack : GeneralStateBase
 {
     public override void EnterState(Player pl)
     {
         pl.gStateShow = Player.generalStates.attack;
+        // start attack
         pl.comboCount = 1;
         if (pl.isGrounded)
         {
@@ -22,12 +24,7 @@ public class GeneralStateAttack : GeneralStateBase
     }
 
     public override void Update(Player pl)
-    {
-        /*if (pl.comboCount == 1 && pl.comboed)
-        {
-            pl.playerAnim.SetInteger("AttackStateLight", 0);
-        }*/
-    }
+    { }
 
     public override void FixedUpdate(Player pl)
     {

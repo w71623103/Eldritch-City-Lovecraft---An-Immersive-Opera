@@ -223,6 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1644430850742246520}
   - component: {fileID: 1644430850742246527}
+  - component: {fileID: 7756941293409139998}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -297,3 +298,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7756941293409139998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644430850742246521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271967f1ea763584196ba39056aed983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboard: {fileID: 1986340925, guid: 80c4b9d7179c07447b281a781062c2bf, type: 3}
+  controller: {fileID: 21300000, guid: 796c6ecfdc54dc441b1a5bd1cf5007d9, type: 3}

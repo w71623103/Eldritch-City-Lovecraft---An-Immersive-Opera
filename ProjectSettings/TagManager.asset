@@ -18,6 +18,7 @@ TagManager:
   - EnemyMovementCommand
   - Item
   - GameManager
+  - DeathBringer
   layers:
   - Default
   - TransparentFX

@@ -406,6 +406,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Intro",
+            "id": "c71bca33-3d1c-4596-910d-8e01856ac126",
+            "actions": [
+                {
+                    "name": "Intro",
+                    "type": "Button",
+                    "id": "42f0a061-cb24-418d-ae97-9563ee9ccd80",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b6883d85-1e30-4d65-b514-965ce3544cfe",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "xbox one",
+                    "action": "Intro",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

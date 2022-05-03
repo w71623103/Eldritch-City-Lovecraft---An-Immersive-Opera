@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//A Game Manager that is not destroying between Scenes.
 public class GameManager : MonoBehaviour
 {
+    public string controlScheme;
     public List<GameManagerKeyEventInfo> importantEventRecord = new List<GameManagerKeyEventInfo>();
 
     // Start is called before the first frame update
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour
         
     }
 
+    //Two functions to record if a important event (e.g. NPC conversation) happened.
     public bool checkEventHappend(string key)
     {
         foreach (GameManagerKeyEventInfo eventRecord in importantEventRecord)

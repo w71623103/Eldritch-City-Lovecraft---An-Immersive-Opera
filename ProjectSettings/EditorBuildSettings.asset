@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: a25f74c7bae011a40b5a238b96916350
+  - enabled: 1
     path: Assets/Scenes/Initial.unity
     guid: ac25d7948451f8248879ba1f6505899a
   - enabled: 1
@@ -20,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NPCRoom.unity
     guid: 47ed15fc1ebaa634a939cb68825cd506
+  - enabled: 1
+    path: Assets/Scenes/GraveYard.unity
+    guid: 7aff2ecb71769d14db5d9c67c1125937
   m_configObjects: {}

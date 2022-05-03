@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -108,6 +109,8 @@ public class Player : MonoBehaviour
     [Header("Hit Effects")]
     public PlayRandomEffects bloodEffect;
 
+
+    private PlayerInput plIn;
     public void ChangeGeneralState(GeneralStateBase newState)
     {
         if (generalState != null)
@@ -149,12 +152,14 @@ public class Player : MonoBehaviour
         stemina = maxStemina;
         Hp = maxHp;
 
-        
+        plIn = GetComponent<PlayerInput>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Hp <= 0) OnDie();
+        GameObject.Find("GameManager").GetComponent<GameManager>().controlScheme = plIn.currentControlScheme;
         playerAnim.SetFloat("hSpeed", Mathf.Abs(horizontalMovement));
         switch (currentSceneType)
         {
@@ -376,6 +381,16 @@ public class Player : MonoBehaviour
         
     }
 
+    void OnDie()
+    {
+        playerAnim.SetTrigger("dead");
+    }
+
+    public void Rrestart()
+    {
+        SceneManager.LoadScene("Intro");
+    }
+
     public void endHurt()
     {
         playerRB.velocity = Vector2.zero;
@@ -409,10 +424,10 @@ public class Player : MonoBehaviour
 
     }
 
-    public void showHealAnim()
+/*    public void showHealAnim()
     {
         
-    }
+    }*/
 
     //Attack Support Methods
     public void nextCombo()

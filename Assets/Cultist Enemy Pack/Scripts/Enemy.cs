@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     public int maxHp;
     public bool allowDamage = true;
     public GameObject hpBar;
+    public bool isDead = false;
 
     [Header("Components")]
     public Rigidbody2D enemyRB;
@@ -86,7 +87,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Start()
+    protected virtual void setUp()
     {
         Hp = maxHp;
         generalState = movementState;
@@ -99,16 +100,22 @@ public class Enemy : MonoBehaviour
         //interactionLayerMask = LayerMask.GetMask("Interactable");
     }
 
+    void Start()
+    {
+        setUp();
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (Hp <= 0)
         {
+            isDead = true;
             enemyAnim.SetTrigger(dieTriggerHash);
         }
         generalState.Update(this);
 
-        if (seePlayer && generalState != attackStateLight && generalState != hurtState)
+        if (seePlayer && generalState != attackStateLight && generalState != hurtState && !isDead)
             OnLightAttack();
         /*else
             endAttack();*/
@@ -118,7 +125,7 @@ public class Enemy : MonoBehaviour
 
     protected void FixedUpdate()
     {
-        generalState.FixedUpdate(this);
+        generalState.FixedUpdate(gameObject.GetComponent<Enemy>());
     }
 
     //Action Functions
